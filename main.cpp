@@ -6,6 +6,8 @@
 // - Establecemos un gris medio como color con base
 GLfloat screenColor[4] = { 0.6, 0.6, 0.6, 1.0 };
 
+GLfloat differentIncrement[3] = { 0.06, 0.03, 0.02 };
+
 // - Esta función asegura que los valores de color se encuentren en el rango [0,1]
 GLfloat color_limit (GLfloat value) {
     if (value < 0.0) return 0.0;
@@ -59,16 +61,19 @@ void scroll_callback ( GLFWwindow *window, double xoffset, double yoffset )
             << " Unidades en horizontal y " << yoffset
             << " unidades en vertical" << std::endl;
 
-    GLfloat increment = (GLfloat) yoffset * 0.02 ;
-    GLfloat new_value;
-
     // - Establecemos nuevos valores que no pasen el limite de [0,1]
-    new_value = screenColor[0] + increment;
-    screenColor[0] = color_limit(new_value);
-    new_value = screenColor[1] + increment;
-    screenColor[1] = color_limit(new_value);
-    new_value = screenColor[2] + increment;
-    screenColor[2] = color_limit(new_value);
+    for (int i = 0; i<3; i++) {
+
+        //los colores incrementan a ritmos distintos
+        GLfloat increment = (GLfloat) yoffset * differentIncrement[i] ;
+        GLfloat new_value;
+
+        new_value = screenColor[i] + increment;
+
+        screenColor[i] = color_limit ( new_value );
+
+    }
+
 
     // - Aplicamos el nuevo color de fondo
     glClearColor ( screenColor[0], screenColor[1], screenColor[2], screenColor[3] );
